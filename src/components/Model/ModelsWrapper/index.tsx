@@ -2,7 +2,9 @@ import React, { useCallback, useRef, useState } from 'react';
 
 import ModelsContext, { CarModel } from '../ModelsContext';
 
-import { Container } from './styles';
+import ModelOverlay from '../ModelOverlay';
+
+import { Container, OverlayRoot } from './styles';
 
 const ModelsWrapper: React.FC = ({children}) => {
 
@@ -35,7 +37,17 @@ const ModelsWrapper: React.FC = ({children}) => {
         unregisterModel,
         getModelByName
     }}>
-      <Container ref={wrapperRef}>{children}</Container>
+      <Container ref={wrapperRef}>
+        <OverlayRoot>
+          {registeredModels.map(item => (
+            <ModelOverlay key={item.modelName} model={item}>
+              {item.overlayNode}
+            </ModelOverlay>
+          ))}
+        </OverlayRoot>
+        
+        {children}
+      </Container>
     </ModelsContext.Provider>
   );
 };
